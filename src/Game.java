@@ -193,37 +193,31 @@ public class Game {
         return score;
     }
 
-    /**
-     * Executes move.
-     * @param move The move in list format.
-     * @return True if move was executed legally and false otherwise.
-     */
-    public boolean move(List<Integer> move) {
-        if(!isLegalMove(move)) {
-            return false;
-        }
-        board = move(board, move);
-        return true;
-        //TODO
+    private int getPiece(List<Integer> square) {
+        return board[square.get(0)][square.get(1)];
     }
+
 
     /**
      * Executes best possible move for the opponent.
      */
     public void computerMove() {
-        List<Integer> move = calculateBestMove(4);
-        move(move);
     }
 
-    /**
-     * Determines if a given move is legal.
-     * @param move Move in list form.
-     * @return True if move is legal and false otherwise.
-     */
-    public boolean isLegalMove(List<Integer> move) {
-        //TODO
-        return true;
-    }
+    /*private List<> generateMovesForPiece(Square from, Square to) {
+
+        List
+
+        switch (from.piece) {
+            case SOLDIER:
+                if(true) {
+
+                }
+                break;
+
+        }
+    }*/
+
 
     /**
      * Checks if this position is in checkMate.
