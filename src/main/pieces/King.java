@@ -1,7 +1,7 @@
-package pieces;
+package main.pieces;
 
-import game.Board;
-import game.Move;
+import main.game.Board;
+import main.game.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,12 @@ public class King extends Piece {
         this.value = 10000;
     }
 
+    public King(King o) {
+        super(o.color, o.x, o.y);
+        this.value = o.value;
+        this.hasBeenMoved = o.hasBeenMoved;
+    }
+
     public List<Move> generateAllLegalMoves(Board board) {
 
         List<Move> moves = new ArrayList<>();
@@ -25,7 +31,7 @@ public class King extends Piece {
         // CASTLING
         if(this.color) {
             if(!this.hasBeenMoved) {
-                //
+                // King side castle
                 if(board.getPiece(7,0).getClass() == Rook.class) {
                     Rook rook = (Rook) board.getPiece(7,0);
                     if(!rook.hasBeenMoved) {
@@ -50,7 +56,7 @@ public class King extends Piece {
             }
         } else {
             if(!this.hasBeenMoved) {
-                //
+                // King side castle
                 if(board.getPiece(0,0).getClass() == Rook.class) {
                     Rook rook = (Rook) board.getPiece(0,0);
                     if(!rook.hasBeenMoved) {
@@ -75,6 +81,7 @@ public class King extends Piece {
             }
         }
 
+        // These are the moves one step around King's positions.
         for(int i = -1; i <= 1; i++) {
             for(int j = -1; j <= 1; j++) {
                 if(i==0 && j==0) continue;

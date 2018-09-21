@@ -1,7 +1,7 @@
-package pieces;
+package main.pieces;
 
-import game.Board;
-import game.Move;
+import main.game.Board;
+import main.game.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,19 +9,24 @@ import java.util.List;
 /**
  * Created by alecsiikaluoma on 18.9.2018.
  */
-public class Horse extends Piece {
+public class Knight extends Piece {
 
-    public Horse(boolean color, int x, int y) {
+    public Knight(boolean color, int x, int y) {
         super(color, x, y);
         this.value = 3;
+    }
+
+    public Knight(Knight o) {
+        super(o.color, o.x, o.y);
+        this.value = o.value;
     }
 
     public List<Move> generateAllLegalMoves(Board board) {
 
         List<Move> moves = new ArrayList<>();
 
-        // WHITE
-        if(this.getColor() == Color.WHITE || this.getColor() == Color.BLACK) {
+        // Knight works the same way for white and black
+        if(this.getColor() || !this.getColor()) {
             // ONE RIGHT, TWO UP
             Move m = createMove(board, x - 2, y + 1);
             if(m.isInsideBoard() && !this.hasSameColor(board, m)) {

@@ -1,3 +1,5 @@
+package main;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -6,11 +8,10 @@ import java.util.Scanner;
  * This class implements a simple way to play against a computer.
  */
 
-import game.Board;
-import game.Chess;
-import game.Move;
-import ui.CommandLineInterface;
-import ui.Utils;
+import main.game.Board;
+import main.game.Chess;
+import main.game.Move;
+import main.ui.Utils;
 
 public class Play {
 
@@ -21,6 +22,7 @@ public class Play {
         Board board = new Board();
 
         System.out.print("To choose your color type: 'white' (default) or 'black': ");
+        System.out.println();
         Scanner scan = new Scanner(System.in);
         String s = scan.next();
         if(s.equals("white")) {
@@ -29,7 +31,8 @@ public class Play {
             color = false;
         }
 
-        CommandLineInterface.printChessBoard(game.board);
+        System.out.println(board);
+        System.out.println();
 
         System.out.println("You choose your move this way: 'b2 b3', 'e5 e8'.");
 
@@ -37,6 +40,9 @@ public class Play {
         while(true) {
 
             // User's turn
+            if(game.isMate(Chess.WHITE)) {
+                break;
+            }
             while(true) {
                 System.out.print("Enter your move: ");
                 scan = new Scanner(System.in);
@@ -46,12 +52,18 @@ public class Play {
                 }
                 if (Utils.isValidMoveString(str)) {
                     List<Integer> arrayMove = Utils.moveToArray(str);
-                    Move move = new Move(board, Chess.WHITE, arrayMove.get(0), arrayMove.get(1), arrayMove.get(2), arrayMove.get(3));
-                    boolean successfulMove = board.executeMove(move);
+                    if(color) {
+                        arrayMove.set(3, 7-arrayMove.get(3));
+                        arrayMove.set(1, 7-arrayMove.get(1));
+                    }
+                    Move move = new Move(board, Chess.WHITE, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
+                    boolean successfulMove = board.move(move);
                     if(!successfulMove) {
                         System.out.println("This move is illegal.");
                     } else {
-                        CommandLineInterface.printChessBoard(game.board);
+                        System.out.println();
+                        System.out.println(board);
+                        System.out.println();
                         break;
                     }
                 } else {
@@ -59,16 +71,17 @@ public class Play {
                 }
             }
 
-            if(game.isMate()) {
+            if(game.isMate(Chess.BLACK)) {
                 break;
             }
 
             // Computer's turn
-            game.computerMove();
-            if(game.isMate()) {
-                break;
-            }
+            System.out.println("Computer moving...");
+            game.computerMove(board);
 
+            System.out.println("Computer move:");
+            System.out.println(board);
+            System.out.println();
 
         }
 

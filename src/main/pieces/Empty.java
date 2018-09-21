@@ -1,7 +1,7 @@
-package pieces;
+package main.pieces;
 
-import game.Board;
-import game.Move;
+import main.game.Board;
+import main.game.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,11 @@ import java.util.List;
  */
 public class Empty extends Piece {
     public Empty() {
+        super();
+        this.empty = true;
+    }
+
+    public Empty(Empty o) {
         super();
         this.empty = true;
     }

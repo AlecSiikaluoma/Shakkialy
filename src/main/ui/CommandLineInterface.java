@@ -1,7 +1,6 @@
-package ui;
+package main.ui;
 
-import game.Board;
-import pieces.Piece;
+import main.game.Board;
 
 /**
  * Created by alecsiikaluoma on 14.9.2018.
@@ -31,10 +30,10 @@ public final class CommandLineInterface {
             System.out.print(i + 1 + "|");
             for (int j = 0; j < b.getBoard()[i].length; j++) {
                 String start = "";
-                if(b.getPiece(i,j).empty || b.getPiece(i,j).getColor() == Piece.Color.WHITE) {
+                if(b.getPiece(i,j).empty || b.getPiece(i,j).getColor()) {
                     start += " ";
                 }
-                if(b.getPiece(i,j).getColor() == Piece.Color.BLACK) {
+                if(!b.getPiece(i,j).getColor() && !b.getPiece(i,j).empty) {
                     System.out.print(" " + start + ((-1)*b.getPiece(i,j).value));
                 } else {
                     System.out.print(" " + start + b.getPiece(i, j).value);

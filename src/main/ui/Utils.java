@@ -1,4 +1,8 @@
-package ui;
+package main.ui;
+
+import main.game.Board;
+import main.game.Move;
+import main.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,18 @@ import java.util.List;
  *
  */
 public final class Utils {
+
+    public static Piece stringToPiece(Board board, String s) {
+        s = s.concat(" a4");
+        List<Integer> arr = moveToArray(s);
+        return board.getPiece(7-arr.get(1), arr.get(0));
+    }
+
+    public static Move stringToMove(Board board, String s) {
+        List<Integer> arr = moveToArray(s);
+        Piece p = board.getPiece(arr.get(1), arr.get(0));
+        return new Move(board, p.color, 7-arr.get(1), arr.get(0), 7-arr.get(3), arr.get(2));
+    }
 
     public static boolean isValidMoveString(String s) {
         if(s.length() == 5 && s.substring(0,1).matches("[a-h]") && s.substring(1,2).matches("[1-8]") && s.substring(2,3).matches("\\s")
@@ -23,33 +39,33 @@ public final class Utils {
         m = m.replaceAll("\\s+", "");
         for(int i = 0; i < m.length(); i++) {
             if(Character.isDigit(m.charAt(i))) {
-                arr.add(Integer.parseInt(m.substring(i,i+1)));
+                arr.add(Integer.parseInt(m.substring(i,i+1)) - 1);
             } else {
                 int out = 0;
                 switch (m.charAt(i)) {
                     case 'a':
-                        out = 1;
+                        out = 0;
                         break;
                     case 'b':
-                        out = 2;
+                        out = 1;
                         break;
                     case 'c':
-                        out = 3;
+                        out = 2;
                         break;
                     case 'd':
-                        out = 4;
+                        out = 3;
                         break;
                     case 'e':
-                        out = 5;
+                        out = 4;
                         break;
                     case 'f':
-                        out = 6;
+                        out = 5;
                         break;
                     case 'g':
-                        out = 7;
+                        out = 6;
                         break;
                     case 'h':
-                        out = 8;
+                        out = 7;
                         break;
                     default:
                         break;

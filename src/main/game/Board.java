@@ -1,7 +1,8 @@
-package game;
+package main.game;
 
-import pieces.*;
+import main.pieces.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,16 +16,22 @@ public class Board {
     public List<Move> whiteMoves;
     public List<Move> blackMoves;
 
+    /**
+     * Initialize chess starting position for board.
+     */
     public Board() {
+        whiteMoves = new ArrayList<>();
+        blackMoves = new ArrayList<>();
+
         board = new Piece[8][8];
 
         board[0][0] = new Rook(Chess.BLACK, 0, 0);
-        board[0][1] = new Horse(Chess.BLACK, 0, 1);
+        board[0][1] = new Knight(Chess.BLACK, 0, 1);
         board[0][2] = new Bishop(Chess.BLACK, 0, 2);
         board[0][3] = new Queen(Chess.BLACK, 0, 3);
         board[0][4] = new King(Chess.BLACK, 0, 4);
         board[0][5] = new Bishop(Chess.BLACK, 0, 5);
-        board[0][6] = new Horse(Chess.BLACK, 0, 5);
+        board[0][6] = new Knight(Chess.BLACK, 0, 6);
         board[0][7] = new Rook(Chess.BLACK, 0, 7);
 
         for (int i = 0; i < board[1].length; i++) {
@@ -37,79 +44,53 @@ public class Board {
             }
         }
 
-        for (int i = 0; i < board[1].length; i++) {
+        for (int i = 0; i < board[6].length; i++) {
             board[6][i] = new Pawn(Chess.WHITE, 6, i);
         }
 
         board[7][0] = new Rook(Chess.WHITE, 7, 0);
-        board[7][1] = new Horse(Chess.WHITE, 7, 1);
+        board[7][1] = new Knight(Chess.WHITE, 7, 1);
         board[7][2] = new Bishop(Chess.WHITE, 7, 2);
         board[7][3] = new Queen(Chess.WHITE, 7, 3);
         board[7][4] = new King(Chess.WHITE, 7, 4);
         board[7][5] = new Bishop(Chess.WHITE, 7, 5);
-        board[7][6] = new Horse(Chess.WHITE, 7, 6);
+        board[7][6] = new Knight(Chess.WHITE, 7, 6);
         board[7][7] = new Rook(Chess.WHITE, 7, 7);
-
-
-        /*int[][] startingPosition = {{-4, -2, -3, -5, -6, -3, -2, -4},
-                {-1, -1, -1, -1, -1, -1, -1, -1},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {1, 1, 1, 1, 1, 1, 1, 1},
-                {4, 2, 3, 5, 6, 3, 2, 4}};
-
-        board = convertNumsToPieces(startingPosition);*/
     }
-
-    /*private Piece[][] convertNumsToPieces(int[][] nums) {
-
-        Piece[][] pieces = new Piece[8][8];
-
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = 0; j < nums[i].length; j++) {
-                switch (nums[i][j]) {
-                    case 0:
-                        pieces[i][j] = new Empty();
-                        break;
-                    case -1:
-                        pieces[i][j] = new Pawn(Chess.BLACK);
-                        break;
-                    case 1:
-                        pieces[i][j] = new Pawn(Chess.WHITE);
-                        break;
-
-                }
-            }
-        }
-
-        return pieces;
-
-    }*/
 
 
     public Piece getPiece(int fromX, int fromY) {
         return board[fromX][fromY];
     }
 
+    public Piece getPiece(Move move) {
+        return board[move.toX][move.toY];
+    }
+
     public void executeMove(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
-        if(this.getPiece(move.toX,move.toY).getColor()) {
+        if(piece.color) {
            this.whiteMoves.add(move);
-        } else if(this.getPiece(move.toX, move.toY).getColor()) {
+        } else if(!piece.color) {
             this.blackMoves.add(move);
+        }
+        if(piece.getClass() == Pawn.class) {
+            Pawn p = (Pawn) piece;
+            ((Pawn) piece).neverMoved = false;
+            if(p.isEnPassant(move, this)) {
+                move.enPassant = true;
+            }
         }
         if(move.enPassant) {
             piece.x = move.toX;
             piece.y = move.toY;
             this.board[move.toX][move.toY] = piece;
-            if(move.piece.getColor()) {
-                this.board[move.toX-1][move.toY] = new Empty();
-            } else {
+            if(move.piece.color) {
                 this.board[move.toX+1][move.toY] = new Empty();
+            } else {
+                board[move.toX-1][move.toY] = new Empty();
             }
-            this.board[move.fromX][move.fromY] = new Empty();
+            board[move.fromX][move.fromY] = new Empty();
         } else if(move.castling) {
             // Normal castle
             Piece rook = board[move.toX][move.toY];
@@ -142,11 +123,14 @@ public class Board {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                p[i][j] = getPiece(i,j);
+                Piece piece = this.getPiece(i,j).clone();
+                p[i][j] = piece;
             }
         }
 
         Board b = new Board();
+        b.blackMoves = this.blackMoves;
+        b.whiteMoves = this.whiteMoves;
         b.board = p;
 
         return b;
@@ -155,16 +139,16 @@ public class Board {
     public String toString() {
         String str = "";
         for (int i = 0; i < board.length; i++) {
-            str = str.concat(i + 1 + "|");
+            str = str.concat(7-i + 1 + "|");
             for (int j = 0; j < board[i].length; j++) {
                 String start = "";
                 if(this.getPiece(i, j).empty || this.getPiece(i,j).getColor()) {
                     start += " ";
                 }
                 if(!this.getPiece(i, j).getColor()) {
-                    str = str.concat(" " + start + ((-1)*this.getPiece(i,j).value));
+                    str = str.concat(" " + start + Math.max(((-1) * this.getPiece(i, j).value), -10));
                 } else {
-                    str = str.concat(" " + start + this.getPiece(i, j).value);
+                    str = str.concat(" " + start + Math.min(this.getPiece(i, j).value, 10));
                 }
             }
             str = str.concat("\n");
@@ -172,6 +156,61 @@ public class Board {
         str = str.concat("-------------------------\n" +
                 "    a  b  c  d  e  f  g  h");
         return str;
+    }
+
+    public boolean existAttackOnKing(boolean color) {
+
+        int kingX = 0;
+        int kingY = 0;
+
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if(this.getPiece(i,j).getColor() == color && this.getPiece(i, j).getClass() == King.class) {
+                    kingX = i;
+                    kingY = j;
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Piece p = this.getPiece(i, j);
+                if(!p.empty && p.getColor() != color) {
+                    List<Move> moves = p.generateAllLegalMoves(this);
+                    for (Move move1 : moves) {
+                        if(move1.toX == kingX && move1.toY == kingY) {
+                            System.out.println("hi");
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public List<Move> generateAllMoves(boolean color) {
+        List<Move> ms = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
+                    List<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
+
+                    for (Move move : moves) {
+                        Board nb = this.clone();
+                        nb.executeMove(move);
+                        if(!nb.existAttackOnKing(color)) {
+                            ms.add(move);
+                        }
+                    }
+                }
+            }
+        }
+
+        return ms;
     }
 
 
