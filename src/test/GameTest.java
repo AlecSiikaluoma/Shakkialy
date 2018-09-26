@@ -14,18 +14,13 @@ public class GameTest {
 
     @Test
     public void whiteTriesToMoveBlack() {
-
         Move move = new Move(board, true, 1, 0, 3, 0);
         assertFalse(move.isLegal());
-
     }
 
     @Test
     public void blackTriesToMoveWhite() {
-
         Move move = new Move(board, false, 6, 0, 5, 0);
         assertFalse(move.isLegal());
-
     }
-
 }

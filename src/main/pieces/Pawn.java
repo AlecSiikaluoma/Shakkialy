@@ -34,15 +34,27 @@ public class Pawn extends Piece {
             // 1 step
             Move move = createMove(board, x - 1, y);
             if(move.isInsideBoard() && board.getPiece(x-1,y).empty) {
-                moves.add(move);
+                if(move.toX == 0) {
+                    moves.addAll(possiblePromotions(board, this.color, x - 1, y));
+                } else {
+                    moves.add(move);
+                }
             }
             move = createMove(board, x - 1, y + 1);
             if(move.isInsideBoard() && !this.hasSameColor(board, move) && !board.getPiece(move).empty) {
-                moves.add(move);
+                if(move.toX == 0) {
+                    moves.addAll(possiblePromotions(board, this.color, x - 1, y + 1));
+                } else {
+                    moves.add(move);
+                }
             }
             move = createMove(board, x - 1, y - 1);
             if(move.isInsideBoard() && !this.hasSameColor(board, move) && !board.getPiece(move).empty) {
-                moves.add(move);
+                if(move.toX == 0) {
+                    moves.addAll(possiblePromotions(board, this.color, x - 1, y - 1));
+                } else {
+                    moves.add(move);
+                }
             }
             // 2 step
             if(this.neverMoved) {
@@ -80,15 +92,27 @@ public class Pawn extends Piece {
             // 1 step
             Move move = createMove(board, x + 1, y);
             if(move.isInsideBoard() && board.getPiece(move).empty) {
-                moves.add(move);
+                if(move.toX == 7) {
+                    moves.addAll(possiblePromotions(board, this.color, x + 1, y));
+                } else {
+                    moves.add(move);
+                }
             }
             move = createMove(board, x + 1, y + 1);
             if(move.isInsideBoard() && !this.hasSameColor(board, move) && !board.getPiece(move).empty) {
-                moves.add(move);
+                if(move.toX == 7) {
+                    moves.addAll(possiblePromotions(board, this.color, x + 1, y + 1));
+                } else {
+                    moves.add(move);
+                }
             }
             move = createMove(board, x + 1, y - 1);
             if(move.isInsideBoard() && !this.hasSameColor(board, move) && !board.getPiece(move).empty) {
-                moves.add(move);
+                if(move.toX == 7) {
+                    moves.addAll(possiblePromotions(board, this.color, x + 1, y + - 1));
+                } else {
+                    moves.add(move);
+                }
             }
             // 2 step
             if(this.neverMoved) {
@@ -125,6 +149,30 @@ public class Pawn extends Piece {
         }
 
         return moves;
+    }
+
+    private List<Move> possiblePromotions(Board board, boolean color, int x, int y) {
+
+        List<Move> moves = new ArrayList<>();
+
+        Move prom = createMove(board, x, y);
+        prom.promotion = new Knight(color, x, y);
+        moves.add(prom);
+
+        prom = createMove(board, x, y);
+        prom.promotion = new Bishop(color, x, y);
+        moves.add(prom);
+
+        prom = createMove(board, x, y);
+        prom.promotion = new Rook(color, x, y);
+        moves.add(prom);
+
+        prom = createMove(board, x, y);
+        prom.promotion = new Queen(color, x, y);
+        moves.add(prom);
+
+        return moves;
+
     }
 
     public boolean isEnPassant(Move target, Board board) {

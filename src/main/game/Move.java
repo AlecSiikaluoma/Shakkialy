@@ -1,5 +1,6 @@
 package main.game;
 
+import main.pieces.Empty;
 import main.pieces.Piece;
 
 /**
@@ -17,6 +18,7 @@ public class Move {
 
     public boolean enPassant = false;
     public boolean castling = false;
+    public Piece promotion = new Empty();
 
 
     public Move(Board board, boolean color, int fromX, int fromY, int toX, int toY) {
@@ -47,8 +49,8 @@ public class Move {
      * @return
      */
     public boolean createsAttackOnKing() {
-        Board oldBoard = board.clone();
 
+        Board oldBoard = board.clone();
         Board newBoard = board.clone();
         this.board = newBoard;
         newBoard.executeMove(this);

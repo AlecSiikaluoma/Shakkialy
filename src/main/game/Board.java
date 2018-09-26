@@ -80,6 +80,11 @@ public class Board {
             if(p.isEnPassant(move, this)) {
                 move.enPassant = true;
             }
+            if(move.promotion.getClass() != Empty.class) {
+                this.board[move.toX][move.toY] = move.promotion;
+                this.board[move.fromX][move.fromY] = new Empty();
+                return;
+            }
         }
         if(move.enPassant) {
             piece.x = move.toX;
@@ -173,6 +178,73 @@ public class Board {
             }
         }
 
+        // Check that no Pawn attack exists
+        /*Board nb = this.clone();
+        nb.board[kingX][kingY] = new Pawn(color, kingX, kingY);
+        List<Move> ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == Pawn.class && p.color != color) {
+                return true;
+            }
+        }
+
+        // Check that no Horse attack exists
+        nb = this.clone();
+        nb.board[kingX][kingY] = new Knight(color, kingX, kingY);
+        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == Knight.class && p.color != color) {
+                return true;
+            }
+        }
+
+        // Check that no Bishop attack exists
+        nb = this.clone();
+        nb.board[kingX][kingY] = new Bishop(color, kingX, kingY);
+        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == Bishop.class && p.color != color) {
+                return true;
+            }
+        }
+
+        // Check that no rook attack exists
+        nb = this.clone();
+        nb.board[kingX][kingY] = new Rook(color, kingX, kingY);
+        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == Rook.class && p.color != color) {
+                return true;
+            }
+        }
+
+        // Check that no Queen attack exists
+        nb = this.clone();
+        nb.board[kingX][kingY] = new Queen(color, kingX, kingY);
+        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == Queen.class && p.color != color) {
+                return true;
+            }
+        }
+
+        // Check that no King attack exists
+        nb = this.clone();
+        nb.board[kingX][kingY] = new King(color, kingX, kingY);
+        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
+        for(Move m : ms) {
+            Piece p = nb.getPiece(m.toX, m.toY);
+            if(p.getClass() == King.class && p.color != color) {
+                return true;
+            }
+        }*/
+
+
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 Piece p = this.getPiece(i, j);
@@ -180,7 +252,6 @@ public class Board {
                     List<Move> moves = p.generateAllLegalMoves(this);
                     for (Move move1 : moves) {
                         if(move1.toX == kingX && move1.toY == kingY) {
-                            System.out.println("hi");
                             return true;
                         }
                     }
@@ -196,17 +267,22 @@ public class Board {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
+
                 if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
+
                     List<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
 
                     for (Move move : moves) {
+
                         Board nb = this.clone();
                         nb.executeMove(move);
                         if(!nb.existAttackOnKing(color)) {
                             ms.add(move);
                         }
+
                     }
                 }
+
             }
         }
 

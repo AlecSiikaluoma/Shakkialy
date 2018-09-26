@@ -11,6 +11,7 @@ import java.util.Scanner;
 import main.game.Board;
 import main.game.Chess;
 import main.game.Move;
+import main.pieces.*;
 import main.ui.Utils;
 
 public class Play {
@@ -19,7 +20,6 @@ public class Play {
 
         boolean color = true;
         Game game = new Game(color);
-        Board board = new Board();
 
         System.out.print("To choose your color type: 'white' (default) or 'black': ");
         System.out.println();
@@ -31,7 +31,7 @@ public class Play {
             color = false;
         }
 
-        System.out.println(board);
+        System.out.println(game.board);
         System.out.println();
 
         System.out.println("You choose your move this way: 'b2 b3', 'e5 e8'.");
@@ -40,7 +40,7 @@ public class Play {
         while(true) {
 
             // User's turn
-            if(game.isMate(Chess.WHITE)) {
+            if(game.isMate(color)) {
                 break;
             }
             while(true) {
@@ -56,13 +56,27 @@ public class Play {
                         arrayMove.set(3, 7-arrayMove.get(3));
                         arrayMove.set(1, 7-arrayMove.get(1));
                     }
-                    Move move = new Move(board, Chess.WHITE, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
-                    boolean successfulMove = board.move(move);
+                    Move move = new Move(game.board, Chess.WHITE, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
+                    if(move.piece.getClass() == Pawn.class && (move.toX == 7 || move.toX == 0)) {
+                        System.out.println("Which piece would you like promote pawn to (K/B/R/Q) (Default is Q (Queen): ");
+                        scan = new Scanner(System.in);
+                        str = scan.nextLine();
+                        if(str.equals("K")) {
+                            move.promotion = new Knight(color, move.toX, move.toY);
+                        } else if(str.equals("B")) {
+                            move.promotion = new Bishop(color, move.toX, move.toY);
+                        } else if(str.equals("R")) {
+                            move.promotion = new Rook(color, move.toX, move.toY);
+                        } else {
+                            move.promotion = new Queen(color, move.toX, move.toY);
+                        }
+                    }
+                    boolean successfulMove = game.board.move(move);
                     if(!successfulMove) {
                         System.out.println("This move is illegal.");
                     } else {
                         System.out.println();
-                        System.out.println(board);
+                        System.out.println(game.board);
                         System.out.println();
                         break;
                     }
@@ -71,16 +85,15 @@ public class Play {
                 }
             }
 
-            if(game.isMate(Chess.BLACK)) {
+            // Computer's turn
+            System.out.println("Computer moving...");
+            game.computerMove();
+            if(game.isMate(!color)) {
                 break;
             }
 
-            // Computer's turn
-            System.out.println("Computer moving...");
-            game.computerMove(board);
-
             System.out.println("Computer move:");
-            System.out.println(board);
+            System.out.println(game.board);
             System.out.println();
 
         }
@@ -93,7 +106,7 @@ public class Play {
                 System.out.println("White wins.");
                 break;
             case DRAW:
-                System.out.println("It's a win.");
+                System.out.println("It's a draw.");
                 break;
         }
 
