@@ -1,0 +1,1 @@
+Tällä viikolla olen kirjoittanut lisää testejä sekä korjannut bugeja tekoälystä. Työtä oli tällä työtä tuli tehtyä hieman vähemmän aikaa kului ehkä noin 10-15h. Ensi viikoilla pitää vielä itse rakentaa sopivat tietorakenteet. Toivoisin myös että aikaa jäisi ohjelman tehokkuuden paranteluun. Tämä saattaa vaatii aika laajaa ohjelman rakenteen muokkausta. 
