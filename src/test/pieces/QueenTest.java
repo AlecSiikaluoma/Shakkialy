@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-import main.ui.Utils;
+import main.Utils;
 
 /**
  * Created by alecsiikaluoma on 21.9.2018.

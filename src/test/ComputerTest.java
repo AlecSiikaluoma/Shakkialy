@@ -8,7 +8,7 @@ import main.Game;
 import main.game.Board;
 import main.game.Chess;
 import main.game.Move;
-import main.ui.Utils;
+import main.Utils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

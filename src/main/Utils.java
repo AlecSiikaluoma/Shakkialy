@@ -1,4 +1,4 @@
-package main.ui;
+package main;
 
 import main.game.Board;
 import main.game.Move;

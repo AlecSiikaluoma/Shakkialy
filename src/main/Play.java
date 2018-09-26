@@ -8,11 +8,9 @@ import java.util.Scanner;
  * This class implements a simple way to play against a computer.
  */
 
-import main.game.Board;
 import main.game.Chess;
 import main.game.Move;
 import main.pieces.*;
-import main.ui.Utils;
 
 public class Play {
 

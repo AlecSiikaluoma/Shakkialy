@@ -2,9 +2,8 @@ package test.pieces;
 
 import main.game.Board;
 import main.game.Move;
-import main.pieces.Bishop;
 import main.pieces.Piece;
-import main.ui.Utils;
+import main.Utils;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
