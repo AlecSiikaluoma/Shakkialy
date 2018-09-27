@@ -28,11 +28,15 @@ public class Play {
         } else if(s.equals("black")) {
             color = false;
         }
+        System.out.println("RED - white pieces");
+        System.out.println("BLUE - black pieces");
+        System.out.println();
 
         System.out.println(game.board);
         System.out.println();
 
         System.out.println("You choose your move this way: 'b2 b3', 'e5 e8'.");
+        System.out.println();
 
 
         while(true) {
@@ -85,12 +89,14 @@ public class Play {
 
             // Computer's turn
             System.out.println("Computer moving...");
+            System.out.println();
             game.computerMove();
             if(game.isMate(!color)) {
                 break;
             }
 
             System.out.println("Computer move:");
+            System.out.println();
             System.out.println(game.board);
             System.out.println();
 

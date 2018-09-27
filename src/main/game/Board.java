@@ -69,11 +69,13 @@ public class Board {
 
     public void executeMove(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
+        // Save moves
         if(piece.color) {
            this.whiteMoves.add(move);
         } else if(!piece.color) {
             this.blackMoves.add(move);
         }
+        // Check for special moves
         if(piece.getClass() == Pawn.class) {
             Pawn p = (Pawn) piece;
             ((Pawn) piece).neverMoved = false;
@@ -85,7 +87,13 @@ public class Board {
                 this.board[move.fromX][move.fromY] = new Empty();
                 return;
             }
+        } else if(piece.getClass() == King.class) {
+            if(Math.abs(move.fromY - move.toY) > 1) {
+                move.castling = true;
+            }
         }
+
+        // Execute moves and special moves
         if(move.enPassant) {
             piece.x = move.toX;
             piece.y = move.toY;
@@ -97,26 +105,36 @@ public class Board {
             }
             board[move.fromX][move.fromY] = new Empty();
         } else if(move.castling) {
-            // Normal castle
-            Piece rook = board[move.toX][move.toY];
-            Piece king = move.piece;
+            Rook rook = (Rook) board[move.toX][move.toY];
+            King king = (King) board[move.fromX][move.fromY];
             if(move.toY == 0) {
-                board[move.toX][6] = king;
-                board[move.toX][5] = rook;
-                board[move.toX][4] = new Empty();
-                board[move.toX][7] = new Empty();
-            } else if(move.toY == 7) {
                 board[move.toX][2] = king;
                 board[move.toX][3] = rook;
                 board[move.toX][0] = new Empty();
                 board[move.toX][4] = new Empty();
+            } else if(move.toY == 7) {
+                board[move.toX][6] = king;
+                board[move.toX][5] = rook;
+                board[move.toX][7] = new Empty();
+                board[move.toX][4] = new Empty();
             }
+            rook.hasBeenMoved = true;
+            king.hasBeenMoved = true;
+            move.castling = false;
         } else {
             piece.x = move.toX;
             piece.y = move.toY;
             this.board[move.toX][move.toY] = piece;
             this.board[move.fromX][move.fromY] = new Empty();
         }
+    }
+
+    public void setPiece(Move move) {
+        Piece piece = this.getPiece(move.fromX, move.fromY);
+        piece.x = move.toX;
+        piece.y = move.toY;
+        this.board[move.toX][move.toY] = piece;
+        this.board[move.fromX][move.fromY] = new Empty();
     }
 
     public Piece[][] getBoard() {
@@ -146,20 +164,37 @@ public class Board {
         for (int i = 0; i < board.length; i++) {
             str = str.concat(7-i + 1 + "|");
             for (int j = 0; j < board[i].length; j++) {
-                String start = "";
-                if(this.getPiece(i, j).empty || this.getPiece(i,j).getColor()) {
-                    start += " ";
-                }
-                if(!this.getPiece(i, j).getColor()) {
-                    str = str.concat(" " + start + Math.max(((-1) * this.getPiece(i, j).value), -10));
+                str = str.concat(" ");
+                Piece p = this.getPiece(i,j);
+                if(p.getClass() == Empty.class) {
+                } else if(p.color) {
+                    str = str.concat("\u001B[31m ");
                 } else {
-                    str = str.concat(" " + start + Math.min(this.getPiece(i, j).value, 10));
+                    str = str.concat("\u001B[34m ");
                 }
+
+                if(p.getClass() == Pawn.class) {
+                    str = str.concat("P");
+                } else if(p.getClass() == Knight.class) {
+                    str = str.concat("N");
+                } else if(p.getClass() == Bishop.class) {
+                    str = str.concat("B");
+                } else if(p.getClass() == Rook.class) {
+                    str = str.concat("R");
+                } else if(p.getClass() == Queen.class) {
+                    str = str.concat("Q");
+                } else if(p.getClass() == King.class) {
+                    str = str.concat("K");
+                } else {
+                    str = str.concat(" 0");
+                }
+
+                str = str.concat(" \u001B[0m");
             }
             str = str.concat("\n");
         }
-        str = str.concat("-------------------------\n" +
-                "    a  b  c  d  e  f  g  h");
+        str = str.concat("---------------------------------\n" +
+                "    a   b   c   d   e   f   g   h");
         return str;
     }
 
