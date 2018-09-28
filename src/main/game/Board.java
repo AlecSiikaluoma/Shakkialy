@@ -110,11 +110,19 @@ public class Board {
             if(move.toY == 0) {
                 board[move.toX][2] = king;
                 board[move.toX][3] = rook;
+                king.x = move.toX;
+                king.y = 2;
+                rook.x = move.toX;
+                rook.y = 3;
                 board[move.toX][0] = new Empty();
                 board[move.toX][4] = new Empty();
             } else if(move.toY == 7) {
                 board[move.toX][6] = king;
                 board[move.toX][5] = rook;
+                king.x = move.toX;
+                king.y = 6;
+                rook.x = move.toX;
+                rook.y = 5;
                 board[move.toX][7] = new Empty();
                 board[move.toX][4] = new Empty();
             }
