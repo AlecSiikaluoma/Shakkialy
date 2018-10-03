@@ -2,9 +2,7 @@ package main.pieces;
 
 import main.game.Board;
 import main.game.Move;
-
-import java.util.ArrayList;
-import java.util.List;
+import main.data.structures.ArrayList;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
@@ -24,9 +22,9 @@ public class Rook extends Piece {
         this.value = o.value;
     }
 
-    public List<Move> generateAllLegalMoves(Board board) {
+    public ArrayList<Move> generateAllLegalMoves(Board board) {
 
-        List<Move> moves = new ArrayList<>();
+        ArrayList<Move> moves = new ArrayList<>();
 
         Move move = createMove(board, x + 1, y);
         while(move.isInsideBoard()) {

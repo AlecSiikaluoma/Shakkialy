@@ -5,8 +5,7 @@ package main; /**
 import main.game.Board;
 import main.pieces.Piece;
 import main.game.Move;
-
-import java.util.List;
+import main.data.structures.ArrayList;
 
 public class Game {
 
@@ -38,20 +37,20 @@ public class Game {
     private Move calculateBestMove(int depth) {
 
         if(this.player) {
-            List<Move> moves = board.generateAllMoves(!player);
+            ArrayList<Move> moves = board.generateAllPseudoLegalMoves(!player);
             if(moves.isEmpty()) {
-                this.winner = State.BLACK;
                 return null;
             }
             int bestValue = 1000000;
-            Move bestMove = moves.get(0);
+            Move bestMove = null;
 
             for (int i = 0; i < moves.size(); i++) {
                 Board newPosition = board.clone();
                 newPosition.executeMove(moves.get(i));
-                int value = minimax(newPosition, depth - 1, player, Integer.MIN_VALUE, Integer.MAX_VALUE);
-                //System.out.println(value);
-                //System.out.println(value + " " + moves.get(i).piece.getClass() + " " + moves.get(i).toX + " - " + moves.get(i).toY);
+                if(newPosition.existAttackOnKing(!player)) {
+                    continue;
+                }
+                int value = minimax(newPosition, depth - 1, player, -1000000, 1000000);
                 if (value <= bestValue) {
                     bestValue = value;
                     bestMove = moves.get(i);
@@ -59,25 +58,26 @@ public class Game {
             }
             return bestMove;
         } else {
-            List<Move> moves = board.generateAllMoves(!player);
+            ArrayList<Move> moves = board.generateAllPseudoLegalMoves(!player);
             if(moves.isEmpty()) {
-                this.winner = State.BLACK;
                 return null;
             }
             int bestValue = -1000000;
-            Move bestMove = moves.get(0);
+            Move bestMove = null;
 
             for (int i = 0; i < moves.size(); i++) {
                 Board newPosition = board.clone();
                 newPosition.executeMove(moves.get(i));
-                int value = minimax(newPosition, depth - 1, player, Integer.MIN_VALUE, Integer.MAX_VALUE);
-                //System.out.println(value);
-                //System.out.println(value + " " + moves.get(i).piece.getClass() + " " + moves.get(i).toX + " - " + moves.get(i).toY);
+                if(newPosition.existAttackOnKing(!player)) {
+                    continue;
+                }
+                int value = minimax(newPosition, depth - 1, player, -1000000, 1000000);
                 if (value >= bestValue) {
                     bestValue = value;
                     bestMove = moves.get(i);
                 }
             }
+
             return bestMove;
         }
     }
@@ -99,10 +99,13 @@ public class Game {
 
         if(player) {
             int maxVal = -1000000;
-            List<Move> moves = board.generateAllMoves(player);
+            ArrayList<Move> moves = board.generateAllPseudoLegalMoves(player);
             for(int i = 0; i < moves.size(); i++) {
                 Board newBoard = board.clone();
                 newBoard.executeMove(moves.get(i));
+                if(newBoard.existAttackOnKing(player)) {
+                    continue;
+                }
                 maxVal = Math.max(maxVal, minimax(newBoard, depth - 1, !player, alpha, beta));
                 alpha = Math.max(alpha, maxVal);
                 if(beta <= alpha) {
@@ -112,10 +115,13 @@ public class Game {
             return maxVal;
         } else {
             int minVal = 1000000;
-            List<Move> moves = board.generateAllMoves(player);
+            ArrayList<Move> moves = board.generateAllPseudoLegalMoves(player);
             for(int i = 0; i < moves.size(); i++) {
                 Board newBoard = board.clone();
                 newBoard.executeMove(moves.get(i));
+                if(newBoard.existAttackOnKing(player)) {
+                    continue;
+                }
                 minVal = Math.min(minVal, minimax(newBoard, depth - 1, !player, alpha, beta));
                 beta = Math.min(beta, minVal);
                 if(beta <= alpha) {
@@ -159,9 +165,26 @@ public class Game {
      */
     public void computerMove() {
         Move m = calculateBestMove(4);
+        if(m != null) {
+            board.executeMove(m);
+        }
+    }
 
-
-        board.executeMove(m);
+    /**
+     * Executes best possible move for the opponent.
+     */
+    public void computerMove(boolean color) {
+        Move m = null;
+        if(color == player) {
+            this.player = !this.player;
+            m = calculateBestMove(4);
+            this.player = !this.player;
+        } else {
+            m = calculateBestMove(4);
+        }
+        if(m != null) {
+            board.executeMove(m);
+        }
     }
 
 
@@ -178,20 +201,16 @@ public class Game {
      * Check if the main.game is in a mate position;
      */
     public boolean isMate(boolean color) {
-        if(player == color) {
-            if(board.generateAllMoves(player).isEmpty()) {
-                if(board.existAttackOnKing(player)) {
+        if(board.generateAllMoves(color).isEmpty()) {
+            if(board.existAttackOnKing(color)) {
+                if(color) {
                     this.winner = State.BLACK;
                 } else {
-                    this.winner = State.DRAW;
+                    this.winner = State.WHITE;
                 }
                 return true;
-            }
-        } else {
-            if (this.winner != State.UNFINISHED) {
-                if(!board.existAttackOnKing(color)) {
-                    this.winner = State.DRAW;
-                }
+            } else {
+                this.winner = State.DRAW;
                 return true;
             }
         }

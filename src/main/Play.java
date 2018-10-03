@@ -19,17 +19,17 @@ public class Play {
         boolean color = true;
         Game game = new Game(color);
 
-        System.out.print("To choose your color type: 'white' (default) or 'black': ");
+        System.out.print("To choose your color type 'white' (default) or 'black': ");
         System.out.println();
         Scanner scan = new Scanner(System.in);
         String s = scan.next();
         if(s.equals("white")) {
-            color = true;
+            color = Chess.WHITE;
         } else if(s.equals("black")) {
-            color = false;
+            color = Chess.BLACK;
         }
-        System.out.println("RED - white pieces");
-        System.out.println("BLUE - black pieces");
+        System.out.println("RED represents white pieces");
+        System.out.println("BLUE represents black pieces");
         System.out.println();
 
         System.out.println(game.board);
@@ -37,6 +37,10 @@ public class Play {
 
         System.out.println("You choose your move this way: 'b2 b3', 'e5 e8'.");
         System.out.println();
+
+        if(!color) {
+            game.computerMove();
+        }
 
 
         while(true) {

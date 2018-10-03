@@ -23,4 +23,10 @@ public class GameTest {
         Move move = new Move(board, false, 6, 0, 5, 0);
         assertFalse(move.isLegal());
     }
+
+    @Test
+    public void computerAlwaysEatsKing() {
+
+    }
+
 }

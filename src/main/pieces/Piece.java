@@ -1,9 +1,9 @@
 package main.pieces;
 
+import main.data.structures.ArrayList;
 import main.game.Board;
 import main.game.Move;
 
-import java.util.List;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
@@ -72,7 +72,14 @@ public abstract class Piece {
     }
 
     public boolean checkIfLegalMove(Board b, Move m) {
-        return generateAllLegalMoves(b).contains(m);
+        ArrayList<Move> moves = generateAllLegalMoves(b);
+        for(int i = 0; i < moves.size(); i++) {
+            Move move = moves.get(i);
+            if(move.equals(m)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -80,7 +87,7 @@ public abstract class Piece {
      * @param board
      * @return all legal moves according to chess piece movement rules.
      */
-    public abstract List<Move> generateAllLegalMoves(Board board);
+    public abstract ArrayList<Move> generateAllLegalMoves(Board board);
 
 
 }

@@ -2,8 +2,7 @@ package main.game;
 
 import main.pieces.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import main.data.structures.ArrayList;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
@@ -13,8 +12,8 @@ public class Board {
 
     private Piece[][] board;
 
-    public List<Move> whiteMoves;
-    public List<Move> blackMoves;
+    public ArrayList<Move> whiteMoves;
+    public ArrayList<Move> blackMoves;
 
     /**
      * Initialize chess starting position for board.
@@ -130,6 +129,13 @@ public class Board {
             king.hasBeenMoved = true;
             move.castling = false;
         } else {
+            if(piece.getClass() == Rook.class) {
+                Rook r = (Rook) piece;
+                r.hasBeenMoved = true;
+            } else if(piece.getClass() == King.class) {
+                King k = (King) piece;
+                k.hasBeenMoved = true;
+            }
             piece.x = move.toX;
             piece.y = move.toY;
             this.board[move.toX][move.toY] = piece;
@@ -221,78 +227,11 @@ public class Board {
             }
         }
 
-        // Check that no Pawn attack exists
-        /*Board nb = this.clone();
-        nb.board[kingX][kingY] = new Pawn(color, kingX, kingY);
-        List<Move> ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == Pawn.class && p.color != color) {
-                return true;
-            }
-        }
-
-        // Check that no Horse attack exists
-        nb = this.clone();
-        nb.board[kingX][kingY] = new Knight(color, kingX, kingY);
-        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == Knight.class && p.color != color) {
-                return true;
-            }
-        }
-
-        // Check that no Bishop attack exists
-        nb = this.clone();
-        nb.board[kingX][kingY] = new Bishop(color, kingX, kingY);
-        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == Bishop.class && p.color != color) {
-                return true;
-            }
-        }
-
-        // Check that no rook attack exists
-        nb = this.clone();
-        nb.board[kingX][kingY] = new Rook(color, kingX, kingY);
-        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == Rook.class && p.color != color) {
-                return true;
-            }
-        }
-
-        // Check that no Queen attack exists
-        nb = this.clone();
-        nb.board[kingX][kingY] = new Queen(color, kingX, kingY);
-        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == Queen.class && p.color != color) {
-                return true;
-            }
-        }
-
-        // Check that no King attack exists
-        nb = this.clone();
-        nb.board[kingX][kingY] = new King(color, kingX, kingY);
-        ms = nb.board[kingX][kingY].generateAllLegalMoves(nb);
-        for(Move m : ms) {
-            Piece p = nb.getPiece(m.toX, m.toY);
-            if(p.getClass() == King.class && p.color != color) {
-                return true;
-            }
-        }*/
-
-
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 Piece p = this.getPiece(i, j);
                 if(!p.empty && p.getColor() != color) {
-                    List<Move> moves = p.generateAllLegalMoves(this);
+                    ArrayList<Move> moves = p.generateAllLegalMoves(this);
                     for (Move move1 : moves) {
                         if(move1.toX == kingX && move1.toY == kingY) {
                             return true;
@@ -305,15 +244,15 @@ public class Board {
         return false;
     }
 
-    public List<Move> generateAllMoves(boolean color) {
-        List<Move> ms = new ArrayList<>();
+    public ArrayList<Move> generateAllMoves(boolean color) {
+        ArrayList<Move> ms = new ArrayList<>();
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
 
                 if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
 
-                    List<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
+                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
 
                     for (Move move : moves) {
 
@@ -322,6 +261,33 @@ public class Board {
                         if(!nb.existAttackOnKing(color)) {
                             ms.add(move);
                         }
+
+                    }
+                }
+
+            }
+        }
+
+        return ms;
+    }
+
+    public ArrayList<Move> generateAllPseudoLegalMoves(boolean color) {
+        ArrayList<Move> ms = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+
+                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
+
+                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
+
+                    for (Move move : moves) {
+
+                        //Board nb = this.clone();
+                        //nb.executeMove(move);
+                        //if(!nb.existAttackOnKing(color)) {
+                            ms.add(move);
+                        //}
 
                     }
                 }

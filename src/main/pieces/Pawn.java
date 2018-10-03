@@ -2,9 +2,7 @@ package main.pieces;
 
 import main.game.Board;
 import main.game.Move;
-
-import java.util.ArrayList;
-import java.util.List;
+import main.data.structures.ArrayList;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
@@ -25,9 +23,9 @@ public class Pawn extends Piece {
         this.neverMoved = o.neverMoved;
     }
 
-    public List<Move> generateAllLegalMoves(Board board) {
+    public ArrayList<Move> generateAllLegalMoves(Board board) {
 
-        List<Move> moves = new ArrayList<>();
+        ArrayList<Move> moves = new ArrayList<>();
 
         //Player is WHITE.
         if(this.color) {
@@ -151,9 +149,9 @@ public class Pawn extends Piece {
         return moves;
     }
 
-    private List<Move> possiblePromotions(Board board, boolean color, int x, int y) {
+    private ArrayList<Move> possiblePromotions(Board board, boolean color, int x, int y) {
 
-        List<Move> moves = new ArrayList<>();
+        ArrayList<Move> moves = new ArrayList<>();
 
         Move prom = createMove(board, x, y);
         prom.promotion = new Knight(color, x, y);
