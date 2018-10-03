@@ -3,9 +3,7 @@ package main;
 import main.game.Board;
 import main.game.Move;
 import main.pieces.Piece;
-
-import java.util.ArrayList;
-import java.util.List;
+import main.data.structures.ArrayList;
 
 /**
  * Created by alecsiikaluoma on 14.9.2018.
@@ -16,12 +14,12 @@ public final class Utils {
 
     public static Piece stringToPiece(Board board, String s) {
         s = s.concat(" a4");
-        List<Integer> arr = moveToArray(s);
+        ArrayList<Integer> arr = moveToArray(s);
         return board.getPiece(7-arr.get(1), arr.get(0));
     }
 
     public static Move stringToMove(Board board, String s) {
-        List<Integer> arr = moveToArray(s);
+        ArrayList<Integer> arr = moveToArray(s);
         Piece p = board.getPiece(arr.get(1), arr.get(0));
         return new Move(board, p.color, 7-arr.get(1), arr.get(0), 7-arr.get(3), arr.get(2));
     }
@@ -34,8 +32,8 @@ public final class Utils {
         return false;
     }
 
-    public static List<Integer> moveToArray(String m) {
-        List<Integer> arr = new ArrayList<Integer>();
+    public static ArrayList<Integer> moveToArray(String m) {
+        ArrayList<Integer> arr = new ArrayList<Integer>();
         m = m.replaceAll("\\s+", "");
         for(int i = 0; i < m.length(); i++) {
             if(Character.isDigit(m.charAt(i))) {

@@ -21,8 +21,8 @@ public class ArrayList<T> implements Iterable<T> {
         if(size == array.length) {
             growArray();
         }
-        size = size + 1;
         array[size] = t;
+        size = size + 1;
     }
 
     public void addAll(ArrayList<T> list) {
@@ -47,6 +47,7 @@ public class ArrayList<T> implements Iterable<T> {
         for (int i = 0; i < array.length; i++) {
             newArray[i] = array[i];
         }
+        array = newArray;
     }
 
     public boolean isEmpty() {

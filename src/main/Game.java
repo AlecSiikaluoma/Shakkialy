@@ -171,7 +171,7 @@ public class Game {
     }
 
     /**
-     * Executes best possible move for the opponent.
+     * Executes best possible move for the opponent when used two computers.
      */
     public void computerMove(boolean color) {
         Move m = null;

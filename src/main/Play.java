@@ -1,6 +1,5 @@
 package main;
 
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -11,6 +10,7 @@ import java.util.Scanner;
 import main.game.Chess;
 import main.game.Move;
 import main.pieces.*;
+import main.data.structures.ArrayList;
 
 public class Play {
 
@@ -57,10 +57,14 @@ public class Play {
                     return ;
                 }
                 if (Utils.isValidMoveString(str)) {
-                    List<Integer> arrayMove = Utils.moveToArray(str);
+                    ArrayList<Integer> arrayMove = Utils.moveToArray(str);
                     if(color) {
-                        arrayMove.set(3, 7-arrayMove.get(3));
-                        arrayMove.set(1, 7-arrayMove.get(1));
+                        ArrayList<Integer> arr = new ArrayList<>();
+                        arr.add(arrayMove.get(0));
+                        arr.add(7-arrayMove.get(1));
+                        arr.add(arrayMove.get(2));
+                        arr.add(7-arrayMove.get(3));
+                        arrayMove = arr;
                     }
                     Move move = new Move(game.board, Chess.WHITE, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
                     if(move.piece.getClass() == Pawn.class && (move.toX == 7 || move.toX == 0)) {

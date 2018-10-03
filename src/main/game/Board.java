@@ -282,13 +282,7 @@ public class Board {
                     ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
 
                     for (Move move : moves) {
-
-                        //Board nb = this.clone();
-                        //nb.executeMove(move);
-                        //if(!nb.existAttackOnKing(color)) {
                             ms.add(move);
-                        //}
-
                     }
                 }
 
