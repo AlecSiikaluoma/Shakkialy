@@ -10,7 +10,7 @@ Pakkauksessa ”data.structures” on toteutettu tarvittavat tietorakenteet.
 
 ## Suorituskyky ja O-analyysi
 
-Ohjelman vaativin osio on tekoälyn siirtojen haku. Siirtoja haetaaan rekursiivisesti. Haemma siirtoja käymällä läpi kaikki tietyn väriset nappula. Jokaiselle nappulalle haemma lailliset mahdolliset siirrot. Jokaiselle mahdolliselle siirrolle joudumme katsomaan laskemaan pelitilanteen arvon laskemalla laudan nappulat. Eli 64 nappulaa x noin 10 mahdollista siirtoa x 64 laudan arvon eli noin 40 000 iteraatiota. 
+Ohjelman vaativin osio on tekoälyn siirtojen haku. Siirtoja haetaaan rekursiivisesti. Haemma siirtoja käymällä läpi kaikki tietyn väriset nappula. Jokaiselle nappulalle haemma lailliset mahdolliset siirrot. Jokaiselle mahdolliselle siirrolle joudumme katsomaan laskemaan pelitilanteen arvon laskemalla laudan nappulat. Eli 64 nappulaa x noin 10 mahdollista siirtoa per nappula x 64 ruutua siirron arvon määrittämiseksi eli noin 40 000 iteraatiota. 
 
 ## Puuttet
 

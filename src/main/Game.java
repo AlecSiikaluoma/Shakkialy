@@ -14,6 +14,8 @@ public class Game {
      *  */
     private boolean player;
 
+    public int depth;
+
     public Board board;
 
     // main.Game result
@@ -28,6 +30,7 @@ public class Game {
         player = white;
         this.board = new Board();
         this.winner = State.UNFINISHED;
+        depth = 4;
     }
 
     /**
@@ -164,7 +167,7 @@ public class Game {
      * Executes best possible move for the opponent.
      */
     public void computerMove() {
-        Move m = calculateBestMove(4);
+        Move m = calculateBestMove(depth);
         if(m != null) {
             board.executeMove(m);
         }
@@ -177,10 +180,10 @@ public class Game {
         Move m = null;
         if(color == player) {
             this.player = !this.player;
-            m = calculateBestMove(4);
+            m = calculateBestMove(depth);
             this.player = !this.player;
         } else {
-            m = calculateBestMove(4);
+            m = calculateBestMove(depth);
         }
         if(m != null) {
             board.executeMove(m);
