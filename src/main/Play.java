@@ -45,7 +45,7 @@ public class Play {
 
         while(true) {
 
-            // User's turn
+            /* -------------------- START User's turn -------------------- */
             if(game.isMate(color)) {
                 break;
             }
@@ -94,8 +94,9 @@ public class Play {
                     System.out.println("This in not a valid move.");
                 }
             }
+            /* -------------------- END User's turn -------------------- */
 
-            // Computer's turn
+            /* -------------------- START Computer's turn -------------------- */
             System.out.println("Computer moving...");
             System.out.println();
             game.computerMove();

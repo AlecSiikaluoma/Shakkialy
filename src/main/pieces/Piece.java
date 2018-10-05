@@ -28,6 +28,13 @@ public abstract class Piece {
         this.value = 0;
     }
 
+    /**
+     * Easier way to create a new move.
+     * @param b Current board.
+     * @param toX Where to move in x-axis.
+     * @param toY Where to move in y-axis.
+     * @return Returns the new move.
+     */
     public Move createMove(Board b, int toX, int toY) {
         return new Move(b, this.color, this.x, this.y, toX, toY);
     }
@@ -36,6 +43,13 @@ public abstract class Piece {
         return this.color;
     }
 
+    /**
+     * Checks if this piece has the same color as the target square of the move. Target square can also be empty and its color is represented
+     * by false like black color. This methods has to be used in comparing colors to avoid confusion between black piece and empty square.
+     * @param b Current board.
+     * @param move Move to be performed to get piece to target square.
+     * @return True if colors match and false otherwise.
+     */
     public boolean hasSameColor(Board b, Move move) {
         if(b.getPiece(move.toX, move.toY).empty) {
             return false;
@@ -46,6 +60,10 @@ public abstract class Piece {
         return false;
     }
 
+    /**
+     * Clones the piece by creating a copy by calling the constructor with the piece.
+     * @return Copy of this piece.
+     */
     public Piece clone() {
         if(this.getClass() == Empty.class) {
             return new Empty((Empty) this);
@@ -71,6 +89,12 @@ public abstract class Piece {
         return new Empty();
     }
 
+    /**
+     * Checks if the move is for this piece legal.
+     * @param b Current position.
+     * @param m The move to be performed.
+     * @return True if legal and false otherwise.
+     */
     public boolean checkIfLegalMove(Board b, Move m) {
         ArrayList<Move> moves = generateAllLegalMoves(b);
         for(int i = 0; i < moves.size(); i++) {

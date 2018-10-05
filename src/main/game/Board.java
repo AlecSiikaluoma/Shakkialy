@@ -66,6 +66,10 @@ public class Board {
         return board[move.toX][move.toY];
     }
 
+    /**
+     * Executes the given move. Checks all the necessary things like if the move is en passant or castling.
+     * @param move
+     */
     public void executeMove(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
         // Save moves
@@ -143,6 +147,10 @@ public class Board {
         }
     }
 
+    /**
+     * Set's a piece to a target square given by the move.
+     * @param move
+     */
     public void setPiece(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
         piece.x = move.toX;
@@ -155,6 +163,9 @@ public class Board {
         return this.board;
     }
 
+    /**
+     * Clones the board and pieces.
+     */
     public Board clone() {
         Piece[][] p = new Piece[8][8];
 
@@ -171,6 +182,117 @@ public class Board {
         b.board = p;
 
         return b;
+    }
+
+    /**
+     * Checks if there is an attack on king of the given color.
+     * @param color
+     * @return
+     */
+    public boolean existAttackOnKing(boolean color) {
+
+        int kingX = 0;
+        int kingY = 0;
+
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if(this.getPiece(i,j).getColor() == color && this.getPiece(i, j).getClass() == King.class) {
+                    kingX = i;
+                    kingY = j;
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Piece p = this.getPiece(i, j);
+                if(!p.empty && p.getColor() != color) {
+                    ArrayList<Move> moves = p.generateAllLegalMoves(this);
+                    for (Move move1 : moves) {
+                        if(move1.toX == kingX && move1.toY == kingY) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Generates all possible moves and checks if these can be really performed so that they don't create an attack on king.
+     * @param color
+     * @return
+     */
+
+    public ArrayList<Move> generateAllMoves(boolean color) {
+        ArrayList<Move> ms = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+
+                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
+
+                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
+
+                    for (Move move : moves) {
+
+                        Board nb = this.clone();
+                        nb.executeMove(move);
+                        if(!nb.existAttackOnKing(color)) {
+                            ms.add(move);
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        return ms;
+    }
+
+    /**
+     * Generates all seemingly legal moves. It doesn't check if move creates a check to save computation power.
+     * If computer chooses a move that creates check it gets punished because it looses the king e.g a high value pice so
+     * we don't need to check for this, which makes the move generation faster.
+     * @param color
+     * @return
+     */
+    public ArrayList<Move> generateAllPseudoLegalMoves(boolean color) {
+        ArrayList<Move> ms = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+
+                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
+
+                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
+
+                    for (Move move : moves) {
+                            ms.add(move);
+                    }
+                }
+
+            }
+        }
+
+        return ms;
+    }
+
+    /**
+     * Moves the piece.
+     * @param move
+     * @return
+     */
+    public boolean move(Move move) {
+        if(move.isLegal()) {
+            this.executeMove(move);
+            return true;
+        }
+        return false;
     }
 
     public String toString() {
@@ -210,95 +332,6 @@ public class Board {
         str = str.concat("---------------------------------\n" +
                 "    a   b   c   d   e   f   g   h");
         return str;
-    }
-
-    public boolean existAttackOnKing(boolean color) {
-
-        int kingX = 0;
-        int kingY = 0;
-
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if(this.getPiece(i,j).getColor() == color && this.getPiece(i, j).getClass() == King.class) {
-                    kingX = i;
-                    kingY = j;
-                }
-            }
-        }
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                Piece p = this.getPiece(i, j);
-                if(!p.empty && p.getColor() != color) {
-                    ArrayList<Move> moves = p.generateAllLegalMoves(this);
-                    for (Move move1 : moves) {
-                        if(move1.toX == kingX && move1.toY == kingY) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public ArrayList<Move> generateAllMoves(boolean color) {
-        ArrayList<Move> ms = new ArrayList<>();
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-
-                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
-
-                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
-
-                    for (Move move : moves) {
-
-                        Board nb = this.clone();
-                        nb.executeMove(move);
-                        if(!nb.existAttackOnKing(color)) {
-                            ms.add(move);
-                        }
-
-                    }
-                }
-
-            }
-        }
-
-        return ms;
-    }
-
-    public ArrayList<Move> generateAllPseudoLegalMoves(boolean color) {
-        ArrayList<Move> ms = new ArrayList<>();
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-
-                if(color == getPiece(i,j).color && !getPiece(i,j).empty) {
-
-                    ArrayList<Move> moves = getPiece(i,j).generateAllLegalMoves(this);
-
-                    for (Move move : moves) {
-                            ms.add(move);
-                    }
-                }
-
-            }
-        }
-
-        return ms;
-    }
-
-
-    public boolean move(Move move) {
-        if(move.isLegal()) {
-            this.executeMove(move);
-            return true;
-        }
-        return false;
     }
 
 }
