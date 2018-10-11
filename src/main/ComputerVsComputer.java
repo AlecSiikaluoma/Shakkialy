@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alecsiikaluoma on 29.9.2018.
+ * With this class you can watch the computer play against itself.
  */
 public class ComputerVsComputer {
 
@@ -16,7 +17,7 @@ public class ComputerVsComputer {
 
         while(true) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             }
             catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
@@ -33,7 +34,7 @@ public class ComputerVsComputer {
             System.out.println("Black is moving...");
             System.out.println();
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             }
             catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();

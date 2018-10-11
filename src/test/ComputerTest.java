@@ -6,7 +6,6 @@ package test;
 
 import main.Game;
 import main.game.Board;
-import main.game.Chess;
 import main.game.Move;
 import main.Utils;
 import org.junit.Test;
@@ -72,7 +71,7 @@ public class ComputerTest {
         game.computerMove();
 
         // Make sure computer (White) takes queen.
-        assertTrue(game.board.getPiece(3, 5).color == Chess.WHITE);
+        assertTrue(game.board.getPiece(3, 5).color == true);
 
     }
 

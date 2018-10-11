@@ -24,9 +24,4 @@ public class GameTest {
         assertFalse(move.isLegal());
     }
 
-    @Test
-    public void computerAlwaysEatsKing() {
-
-    }
-
 }

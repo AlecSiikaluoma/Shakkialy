@@ -1,5 +1,7 @@
-package main; /**
+package main;
+/**
  * Created by alecsiikaluoma on 13.9.2018.
+ * Represents the logic behind the game.
  */
 
 import main.game.Board;
@@ -9,23 +11,27 @@ import main.data.structures.ArrayList;
 
 public class Game {
 
-    /**
-     *  {@VALUE} value is TRUE when user playing white otherwise FALSE.
-     *  */
     private boolean player;
 
+    /**
+     * {@value} Depth of the search in minimax.
+     */
     public int depth;
 
+    /**
+     * {@value} Current board containing the position of the game.
+     */
     public Board board;
 
-    // main.Game result
     enum State {
         WHITE, BLACK, DRAW, UNFINISHED;
     }
-
     private State winner;
 
 
+    /**
+     * Creates a new game.
+     */
     public Game(boolean white) {
         player = white;
         this.board = new Board();
@@ -34,8 +40,8 @@ public class Game {
     }
 
     /**
-     * @param depth Value of search depth.
-     * @return Move in list format.
+     * Calculates the best possible move.
+     * @return Best move according to the algorithm.
      */
     private Move calculateBestMove(int depth) {
 
@@ -85,15 +91,6 @@ public class Game {
         }
     }
 
-    /**
-     * Recursive move valuation method.
-     * @param board Contains the position for which the value is calculated.
-     * @param depth Search tree depth.
-     * @param player True if white, false if depth.
-     * @param alpha Value used in pruning the tree.
-     * @param beta Value used in pruning the tree.
-     * @return The value of the move.
-     */
     private int minimax(Board board, int depth, boolean player, int alpha, int beta) {
 
         if(depth == 0) {
@@ -174,7 +171,8 @@ public class Game {
     }
 
     /**
-     * Executes best possible move for the opponent when used two computers.
+     * Executes best possible move for the opponent when two computers playing
+     * @param color For which color the move is to be performed.
      */
     public void computerMove(boolean color) {
         Move m = null;

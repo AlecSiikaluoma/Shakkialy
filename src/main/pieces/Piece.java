@@ -7,6 +7,7 @@ import main.game.Move;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
+ * Represents the piece in abstract.
  */
 public abstract class Piece {
 
@@ -108,7 +109,6 @@ public abstract class Piece {
 
     /**
      * Generates all legal moves for a given piece. It doesn't check if it creates a check.
-     * @param board
      * @return all legal moves according to chess piece movement rules.
      */
     public abstract ArrayList<Move> generateAllLegalMoves(Board board);

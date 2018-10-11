@@ -16,7 +16,9 @@ public class ArrayList<T> implements Iterable<T> {
         array = new Object[20];
     }
 
-    // Takes a parameter of type t
+    /**
+     * Adds a new element to the end of the ArrayList.
+     */
     public void add(T t) {
         if(size == array.length) {
             growArray();
@@ -25,14 +27,24 @@ public class ArrayList<T> implements Iterable<T> {
         size = size + 1;
     }
 
+    /**
+     * Add all the elements from the parameter list to the ArrayList.
+     * @param list
+     */
     public void addAll(ArrayList<T> list) {
         list.forEach(x -> add(x));
     }
 
+    /**
+     * @return the size of the ArrayList
+     */
     public int size() {
         return size;
     }
 
+    /**
+     * Return the element at index i of the ArrayList
+     */
     public T get(int i) {
         if (i>= size || i <0) {
             throw new IndexOutOfBoundsException("Index does not exist.");
@@ -50,6 +62,10 @@ public class ArrayList<T> implements Iterable<T> {
         array = newArray;
     }
 
+    /**
+     * Checks if the ArrayList is empty
+     * @return
+     */
     public boolean isEmpty() {
         if(size == 0) {
             return true;

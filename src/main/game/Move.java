@@ -5,6 +5,7 @@ import main.pieces.Piece;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
+ * Represents a single chess move.
  */
 public class Move {
 

@@ -6,6 +6,7 @@ import main.data.structures.ArrayList;
 
 /**
  * Created by alecsiikaluoma on 18.9.2018.
+ * Represents the board. It contains moves and pieces.
  */
 
 public class Board {
@@ -24,17 +25,17 @@ public class Board {
 
         board = new Piece[8][8];
 
-        board[0][0] = new Rook(Chess.BLACK, 0, 0);
-        board[0][1] = new Knight(Chess.BLACK, 0, 1);
-        board[0][2] = new Bishop(Chess.BLACK, 0, 2);
-        board[0][3] = new Queen(Chess.BLACK, 0, 3);
-        board[0][4] = new King(Chess.BLACK, 0, 4);
-        board[0][5] = new Bishop(Chess.BLACK, 0, 5);
-        board[0][6] = new Knight(Chess.BLACK, 0, 6);
-        board[0][7] = new Rook(Chess.BLACK, 0, 7);
+        board[0][0] = new Rook(false, 0, 0);
+        board[0][1] = new Knight(false, 0, 1);
+        board[0][2] = new Bishop(false, 0, 2);
+        board[0][3] = new Queen(false, 0, 3);
+        board[0][4] = new King(false, 0, 4);
+        board[0][5] = new Bishop(false, 0, 5);
+        board[0][6] = new Knight(false, 0, 6);
+        board[0][7] = new Rook(false, 0, 7);
 
         for (int i = 0; i < board[1].length; i++) {
-            board[1][i] = new Pawn(Chess.BLACK, 1, i);
+            board[1][i] = new Pawn(false, 1, i);
         }
 
         for(int i = 0; i < 4; i++) {
@@ -44,17 +45,17 @@ public class Board {
         }
 
         for (int i = 0; i < board[6].length; i++) {
-            board[6][i] = new Pawn(Chess.WHITE, 6, i);
+            board[6][i] = new Pawn(true, 6, i);
         }
 
-        board[7][0] = new Rook(Chess.WHITE, 7, 0);
-        board[7][1] = new Knight(Chess.WHITE, 7, 1);
-        board[7][2] = new Bishop(Chess.WHITE, 7, 2);
-        board[7][3] = new Queen(Chess.WHITE, 7, 3);
-        board[7][4] = new King(Chess.WHITE, 7, 4);
-        board[7][5] = new Bishop(Chess.WHITE, 7, 5);
-        board[7][6] = new Knight(Chess.WHITE, 7, 6);
-        board[7][7] = new Rook(Chess.WHITE, 7, 7);
+        board[7][0] = new Rook(true, 7, 0);
+        board[7][1] = new Knight(true, 7, 1);
+        board[7][2] = new Bishop(true, 7, 2);
+        board[7][3] = new Queen(true, 7, 3);
+        board[7][4] = new King(true, 7, 4);
+        board[7][5] = new Bishop(true, 7, 5);
+        board[7][6] = new Knight(true, 7, 6);
+        board[7][7] = new Rook(true, 7, 7);
     }
 
 
@@ -68,7 +69,7 @@ public class Board {
 
     /**
      * Executes the given move. Checks all the necessary things like if the move is en passant or castling.
-     * @param move
+     * @param move Move to be executed
      */
     public void executeMove(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
@@ -149,7 +150,6 @@ public class Board {
 
     /**
      * Set's a piece to a target square given by the move.
-     * @param move
      */
     public void setPiece(Move move) {
         Piece piece = this.getPiece(move.fromX, move.fromY);
@@ -186,8 +186,6 @@ public class Board {
 
     /**
      * Checks if there is an attack on king of the given color.
-     * @param color
-     * @return
      */
     public boolean existAttackOnKing(boolean color) {
 
@@ -223,8 +221,6 @@ public class Board {
 
     /**
      * Generates all possible moves and checks if these can be really performed so that they don't create an attack on king.
-     * @param color
-     * @return
      */
 
     public ArrayList<Move> generateAllMoves(boolean color) {
@@ -258,8 +254,7 @@ public class Board {
      * Generates all seemingly legal moves. It doesn't check if move creates a check to save computation power.
      * If computer chooses a move that creates check it gets punished because it looses the king e.g a high value pice so
      * we don't need to check for this, which makes the move generation faster.
-     * @param color
-     * @return
+     * @return List of moves
      */
     public ArrayList<Move> generateAllPseudoLegalMoves(boolean color) {
         ArrayList<Move> ms = new ArrayList<>();
@@ -284,8 +279,6 @@ public class Board {
 
     /**
      * Moves the piece.
-     * @param move
-     * @return
      */
     public boolean move(Move move) {
         if(move.isLegal()) {

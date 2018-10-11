@@ -7,7 +7,6 @@ import java.util.Scanner;
  * This class implements a simple way to play against a computer.
  */
 
-import main.game.Chess;
 import main.game.Move;
 import main.pieces.*;
 import main.data.structures.ArrayList;
@@ -24,9 +23,9 @@ public class Play {
         Scanner scan = new Scanner(System.in);
         String s = scan.next();
         if(s.equals("white")) {
-            color = Chess.WHITE;
+            color = true;
         } else if(s.equals("black")) {
-            color = Chess.BLACK;
+            color = false;
         }
         System.out.println("RED represents white pieces");
         System.out.println("BLUE represents black pieces");
@@ -66,7 +65,7 @@ public class Play {
                         arr.add(7-arrayMove.get(3));
                         arrayMove = arr;
                     }
-                    Move move = new Move(game.board, Chess.WHITE, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
+                    Move move = new Move(game.board, true, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
                     if(move.piece.getClass() == Pawn.class && (move.toX == 7 || move.toX == 0)) {
                         System.out.println("Which piece would you like promote pawn to (K/B/R/Q) (Default is Q (Queen): ");
                         scan = new Scanner(System.in);
