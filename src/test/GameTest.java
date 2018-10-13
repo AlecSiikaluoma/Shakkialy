@@ -1,5 +1,6 @@
 package test;
 
+import main.Game;
 import main.game.Board;
 import main.game.Move;
 import org.junit.Test;
@@ -10,18 +11,17 @@ import static org.junit.Assert.*;
  */
 public class GameTest {
 
-    Board board = new Board();
+    Game game = new Game(true);
 
     @Test
     public void whiteTriesToMoveBlack() {
-        Move move = new Move(board, true, 1, 0, 3, 0);
-        assertFalse(move.isLegal());
+        assertFalse(game.board.move(new Move(game.board, true, 1, 0, 3, 0)));
     }
 
     @Test
     public void blackTriesToMoveWhite() {
-        Move move = new Move(board, false, 6, 0, 5, 0);
-        assertFalse(move.isLegal());
+        game = new Game(false);
+        assertFalse(game.board.move(new Move(game.board, false, 6, 0, 5, 0)));
     }
 
 }

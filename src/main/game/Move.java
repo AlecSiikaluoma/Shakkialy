@@ -38,6 +38,9 @@ public class Move {
      * @return
      */
     public boolean isLegal() {
+        if(color != board.getPiece(fromX, fromY).color) {
+            return false;
+        }
         if(piece.checkIfLegalMove(board, this) && !this.createsAttackOnKing()) {
             return true;
         }

@@ -52,7 +52,7 @@ public class PerformanceTest {
     @Test
     public void performanceDepth4() {
         Game game = new Game(true);
-        game.depth = 5;
+        game.depth = 4;
         // test move generation performance after 5 moves
         game.computerMove(true);
         game.computerMove();

@@ -16,17 +16,17 @@ public class Play {
     public static void main(String[] args) {
 
         boolean color = true;
-        Game game = new Game(color);
 
         System.out.print("To choose your color type 'white' (default) or 'black': ");
         System.out.println();
         Scanner scan = new Scanner(System.in);
         String s = scan.next();
-        if(s.equals("white")) {
-            color = true;
-        } else if(s.equals("black")) {
+        if(s.equals("black")) {
             color = false;
         }
+
+        Game game = new Game(color);
+
         System.out.println("RED represents white pieces");
         System.out.println("BLUE represents black pieces");
         System.out.println();
@@ -39,6 +39,7 @@ public class Play {
 
         if(!color) {
             game.computerMove();
+            System.out.println(game.board);
         }
 
 
@@ -57,15 +58,13 @@ public class Play {
                 }
                 if (Utils.isValidMoveString(str)) {
                     ArrayList<Integer> arrayMove = Utils.moveToArray(str);
-                    if(color) {
                         ArrayList<Integer> arr = new ArrayList<>();
                         arr.add(arrayMove.get(0));
                         arr.add(7-arrayMove.get(1));
                         arr.add(arrayMove.get(2));
                         arr.add(7-arrayMove.get(3));
                         arrayMove = arr;
-                    }
-                    Move move = new Move(game.board, true, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
+                    Move move = new Move(game.board, color, arrayMove.get(1), arrayMove.get(0), arrayMove.get(3), arrayMove.get(2));
                     if(move.piece.getClass() == Pawn.class && (move.toX == 7 || move.toX == 0)) {
                         System.out.println("Which piece would you like promote pawn to (K/B/R/Q) (Default is Q (Queen): ");
                         scan = new Scanner(System.in);
