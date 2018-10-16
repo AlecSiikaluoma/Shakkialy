@@ -2,6 +2,8 @@
 
 Ohjelma toteuttaa yksinkertaisen shakki tekoälyn. Tekoälyä vastaan voi pelata yksinkertaisen käyttöliittymän avulla, joka on toteutettu komentorivillä. 
 
+## Käyttöohje
+
 Luokalla "Play.java" voi pelata yksinkertaisessa käyttöliittymässä tietokonetta vastaan. Luokalla "ComputerVsComputer.java" voi katsoa kun algoritmi pelaa itseään vastaan.
 
 ## Minimax
